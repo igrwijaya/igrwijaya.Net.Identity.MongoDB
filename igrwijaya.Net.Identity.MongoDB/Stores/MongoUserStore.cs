@@ -1,6 +1,7 @@
 ﻿using igrwijaya.Net.Identity.MongoDB.Models;
 using igrwijaya.Net.Identity.MongoDB.Roles;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
 namespace igrwijaya.Net.Identity.MongoDB.Stores
@@ -20,13 +21,11 @@ namespace igrwijaya.Net.Identity.MongoDB.Stores
 
         #endregion
 
-        public MongoUserStore()
+        public MongoUserStore(IConfiguration configuration)
         {
-            var client = new MongoClient(
-                "mongodb+srv://<username>:<password>@<cluster-address>/test?w=majority"
-            );
+            var client = new MongoClient(configuration["Identity:MongoDbConnection"]);
             
-            var mongoDatabase = client.GetDatabase("test");
+            var mongoDatabase = client.GetDatabase("identity");
             _mongoRoleCollection = mongoDatabase.GetCollection<TRole>("AspNet_Roles");
             _mongoUserCollection = mongoDatabase.GetCollection<TUser>("AspNet_Users");
             _mongoUserRoleCollection = mongoDatabase.GetCollection<MongoUserRole>("AspNet_UserRoles");
@@ -339,6 +338,11 @@ namespace igrwijaya.Net.Identity.MongoDB.Stores
 
             var userRoles = await _mongoUserRoleCollection
                 .FindAsync(item => item.UserId == user.Id, cancellationToken: cancellationToken);
+
+            if (!await userRoles.AnyAsync(cancellationToken: cancellationToken))
+            {
+                return new List<string>();
+            }
 
             var roleIds = userRoles.Current.Select(item => item.RoleId);
             var roles = await _mongoRoleCollection.FindAsync(item => 

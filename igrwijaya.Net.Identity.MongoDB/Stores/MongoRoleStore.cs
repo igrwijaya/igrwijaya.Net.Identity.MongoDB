@@ -1,5 +1,6 @@
 ﻿using igrwijaya.Net.Identity.MongoDB.Roles;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
 namespace igrwijaya.Net.Identity.MongoDB.Stores
@@ -12,13 +13,11 @@ namespace igrwijaya.Net.Identity.MongoDB.Stores
 
         #endregion
 
-        public MongoRoleStore()
+        public MongoRoleStore(IConfiguration configuration)
         {
-            var client = new MongoClient(
-                "mongodb+srv://<username>:<password>@<cluster-address>/test?w=majority"
-            );
-            
-            var mongoDatabase = client.GetDatabase("test");
+            var client = new MongoClient(configuration["Identity:MongoDbConnection"]);
+
+            var mongoDatabase = client.GetDatabase("identity");
             _mongoCollection = mongoDatabase.GetCollection<TRole>("AspNet_Roles");
         }
 

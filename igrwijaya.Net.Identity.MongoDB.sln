@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "igrwijaya.Net.Identity.MongoDB", "igrwijaya.Net.Identity.MongoDB\igrwijaya.Net.Identity.MongoDB.csproj", "{457E8AF3-D361-4FD7-AF69-ED8BE821442C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "igrwijaya.Net.Identity.Test.API", "igrwijaya.Net.Identity.Test.API\igrwijaya.Net.Identity.Test.API.csproj", "{BF0809B6-D497-4441-9C14-1AF9D32890B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{457E8AF3-D361-4FD7-AF69-ED8BE821442C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{457E8AF3-D361-4FD7-AF69-ED8BE821442C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{457E8AF3-D361-4FD7-AF69-ED8BE821442C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF0809B6-D497-4441-9C14-1AF9D32890B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF0809B6-D497-4441-9C14-1AF9D32890B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF0809B6-D497-4441-9C14-1AF9D32890B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF0809B6-D497-4441-9C14-1AF9D32890B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
