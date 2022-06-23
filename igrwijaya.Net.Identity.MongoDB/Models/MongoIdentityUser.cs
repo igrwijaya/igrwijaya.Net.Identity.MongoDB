@@ -1,4 +1,6 @@
-﻿namespace igrwijaya.Net.Identity.MongoDB.Models
+﻿using System;
+
+namespace igrwijaya.Net.Identity.MongoDB.Models
 {
     public class MongoIdentityUser
     {
