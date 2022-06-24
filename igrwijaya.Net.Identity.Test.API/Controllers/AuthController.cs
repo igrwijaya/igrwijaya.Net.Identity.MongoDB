@@ -23,7 +23,10 @@ public class AuthController : Controller
     [HttpGet]
     public async Task<IActionResult> Register()
     {
-        var result = await _userManager.CreateAsync(new ApplicationUser("igrwijaya", "igrwijaya@test.com"), "Temp123*");
+        var user = new ApplicationUser("igrwijaya", "igrwijaya@test.com");
+        var result = await _userManager.CreateAsync(user, "Temp123*");
+
+        await _userManager.AddToRoleAsync(user, "ADMIN");
 
         return Ok(result);
     }
@@ -42,6 +45,8 @@ public class AuthController : Controller
         var user = await _userManager.FindByNameAsync("igrwijaya");
 
         var result = await _signInManager.PasswordSignInAsync(user, "Temp123*", false, false);
+
+        var roles = await _userManager.GetRolesAsync(user);
 
         return Ok(result);
     }

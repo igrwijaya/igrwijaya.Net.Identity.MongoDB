@@ -7,6 +7,7 @@ using igrwijaya.Net.Identity.MongoDB.Models;
 using igrwijaya.Net.Identity.MongoDB.Roles;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace igrwijaya.Net.Identity.MongoDB.Stores
@@ -67,7 +68,7 @@ namespace igrwijaya.Net.Identity.MongoDB.Stores
                 throw new ArgumentNullException(nameof(user));
             }
 
-            return Task.FromResult(user.Id);
+            return Task.FromResult(user.Id.ToString());
         }
 
         public Task<string> GetUserNameAsync(TUser user, CancellationToken cancellationToken)
@@ -148,7 +149,7 @@ namespace igrwijaya.Net.Identity.MongoDB.Stores
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            user.Id = Guid.NewGuid().ToString("N");
+            user.Id = ObjectId.GenerateNewId(DateTime.UtcNow);
 
             await _mongoUserCollection
                 .InsertOneAsync(user, cancellationToken: cancellationToken);
@@ -213,7 +214,7 @@ namespace igrwijaya.Net.Identity.MongoDB.Stores
         private async Task<TUser> ReadUserAsync(string userId, CancellationToken cancellationToken)
         {
             var query = await _mongoUserCollection
-                .FindAsync(item => item.Id == userId, cancellationToken: cancellationToken);
+                .FindAsync(item => item.Id == ObjectId.Parse(userId), cancellationToken: cancellationToken);
 
             return query.FirstOrDefault();
         }
@@ -344,17 +345,19 @@ namespace igrwijaya.Net.Identity.MongoDB.Stores
             var userRoles = await _mongoUserRoleCollection
                 .FindAsync(item => item.UserId == user.Id, cancellationToken: cancellationToken);
 
-            if (!await userRoles.AnyAsync(cancellationToken: cancellationToken))
+            var userRoleList = userRoles.ToList();
+
+            if (!userRoleList.Any())
             {
                 return new List<string>();
             }
 
-            var roleIds = userRoles.Current.Select(item => item.RoleId);
+            var roleIds = userRoleList.Select(item => item.RoleId);
             var roles = await _mongoRoleCollection.FindAsync(item => 
                     roleIds.Contains(item.Id),
                     cancellationToken: cancellationToken);
 
-            return roles.Current
+            return roles.ToList()
                 .Select(item => item.Name)
                 .ToList();
         }
@@ -412,17 +415,18 @@ namespace igrwijaya.Net.Identity.MongoDB.Stores
                 throw new ArgumentNullException(nameof(role));
             }
 
-            var userRoles = await _mongoUserRoleCollection
+            var userRoleCursor = await _mongoUserRoleCollection
                 .FindAsync(item => 
                         item.RoleId == role.Id,
                         cancellationToken: cancellationToken);
 
-            var userIds = userRoles.Current.Select(item => item.UserId);
+            var userRoles = userRoleCursor.ToList();
+            var userIds = userRoles.Select(item => item.UserId);
 
             var users = await _mongoUserCollection
                 .FindAsync(item => userIds.Contains(item.Id), cancellationToken: cancellationToken);
 
-            return users.Current.ToList();
+            return users.ToList();
         }
 
         #endregion

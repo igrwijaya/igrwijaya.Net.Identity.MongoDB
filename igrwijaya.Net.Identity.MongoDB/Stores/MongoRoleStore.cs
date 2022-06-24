@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using igrwijaya.Net.Identity.MongoDB.Roles;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace igrwijaya.Net.Identity.MongoDB.Stores
@@ -52,8 +53,8 @@ namespace igrwijaya.Net.Identity.MongoDB.Stores
             {
                 throw new ArgumentNullException(nameof(role));
             }
-
-            role.Id = Guid.NewGuid().ToString("N");
+            
+            role.Id = ObjectId.GenerateNewId(DateTime.UtcNow);
 
             await _mongoCollection.InsertOneAsync(role, cancellationToken: cancellationToken);
 
@@ -102,7 +103,7 @@ namespace igrwijaya.Net.Identity.MongoDB.Stores
                 throw new ArgumentNullException(nameof(role));
             }
 
-            return Task.FromResult(role.Id);
+            return Task.FromResult(role.Id.ToString());
         }
 
         public Task<string> GetRoleNameAsync(TRole role, CancellationToken cancellationToken)
@@ -196,7 +197,7 @@ namespace igrwijaya.Net.Identity.MongoDB.Stores
         private async Task<TRole> ReadRoleAsync(string roleId, CancellationToken cancellationToken)
         {
             var query = await _mongoCollection
-                .FindAsync(item => item.Id == roleId, cancellationToken: cancellationToken);
+                .FindAsync(item => item.Id == ObjectId.Parse(roleId), cancellationToken: cancellationToken);
 
             return query.FirstOrDefault();
         }

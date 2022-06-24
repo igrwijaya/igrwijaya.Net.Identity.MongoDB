@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Runtime.Serialization;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace igrwijaya.Net.Identity.MongoDB.Models
 {
@@ -15,7 +18,8 @@ namespace igrwijaya.Net.Identity.MongoDB.Models
             Email = email ?? throw new ArgumentNullException(nameof(email));
         }
         
-        public string Id { get; internal set; }
+        [BsonId]
+        public ObjectId Id { get; internal set; }
         
         public string UserName { get; internal set; }
         

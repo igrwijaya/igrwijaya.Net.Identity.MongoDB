@@ -1,4 +1,8 @@
-﻿namespace igrwijaya.Net.Identity.MongoDB.Roles
+﻿using System.Runtime.Serialization;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
+namespace igrwijaya.Net.Identity.MongoDB.Roles
 {
     public class MongoIdentityRole
     {
@@ -12,7 +16,8 @@
             Name = name;
         }
         
-        public string Id { get; internal set; }
+        [BsonId]
+        public ObjectId Id { get; internal set; }
 
         public string Name { get; internal set; }
 
