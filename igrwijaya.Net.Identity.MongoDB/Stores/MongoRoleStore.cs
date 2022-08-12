@@ -21,7 +21,7 @@ namespace igrwijaya.Net.Identity.MongoDB.Stores
         {
             var client = new MongoClient(configuration["Identity:MongoDbConnection"]);
 
-            var mongoDatabase = client.GetDatabase("identity");
+            var mongoDatabase = client.GetDatabase(configuration["Identity:Db"]);
             _mongoCollection = mongoDatabase.GetCollection<TRole>("AspNet_Roles");
         }
 
