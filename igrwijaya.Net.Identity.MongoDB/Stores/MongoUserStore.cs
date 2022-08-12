@@ -284,7 +284,7 @@ namespace igrwijaya.Net.Identity.MongoDB.Stores
             }
 
             var roleCursor = await _mongoRoleCollection
-                .FindAsync(item => item.Name == roleName, cancellationToken: cancellationToken);
+                .FindAsync(item => item.NormalizedName == roleName, cancellationToken: cancellationToken);
 
             var role = roleCursor.FirstOrDefault();
             
@@ -317,7 +317,7 @@ namespace igrwijaya.Net.Identity.MongoDB.Stores
             }
 
             var roleCursor = await _mongoRoleCollection
-                .FindAsync(item => item.Name == roleName, cancellationToken: cancellationToken);
+                .FindAsync(item => item.NormalizedName == roleName, cancellationToken: cancellationToken);
 
             var role = roleCursor.FirstOrDefault();
             
@@ -378,7 +378,7 @@ namespace igrwijaya.Net.Identity.MongoDB.Stores
             }
 
             var roleCursor = await _mongoRoleCollection
-                .FindAsync(item => item.Name == roleName, cancellationToken: cancellationToken);
+                .FindAsync(item => item.NormalizedName == roleName, cancellationToken: cancellationToken);
 
             var role = roleCursor.FirstOrDefault();
             
@@ -406,7 +406,7 @@ namespace igrwijaya.Net.Identity.MongoDB.Stores
             }
 
             var roleCursor = await _mongoRoleCollection
-                .FindAsync(item => item.Name == roleName, cancellationToken: cancellationToken);
+                .FindAsync(item => item.NormalizedName == roleName, cancellationToken: cancellationToken);
 
             var role = roleCursor.FirstOrDefault();
             
