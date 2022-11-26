@@ -15,7 +15,8 @@ namespace igrwijaya.Net.Identity.MongoDB.Stores
     public class MongoUserStore<TUser, TRole> :
         IUserEmailStore<TUser>,
         IUserPasswordStore<TUser>,
-        IUserRoleStore<TUser>
+        IUserRoleStore<TUser>,
+        IQueryableUserStore<TUser>
         where TUser : MongoIdentityUser
         where TRole : MongoIdentityRole
     {
@@ -218,6 +219,8 @@ namespace igrwijaya.Net.Identity.MongoDB.Stores
 
             return query.FirstOrDefault();
         }
+        
+        public IQueryable<TUser> Users => _mongoUserCollection.AsQueryable();
 
         #endregion
 
@@ -531,5 +534,6 @@ namespace igrwijaya.Net.Identity.MongoDB.Stores
         }
 
         #endregion
+        
     }
 }
