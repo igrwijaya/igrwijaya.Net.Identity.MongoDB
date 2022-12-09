@@ -446,7 +446,7 @@ namespace igrwijaya.Net.Identity.MongoDB.Stores
                 throw new ArgumentNullException(nameof(email));
             }
 
-            user.PasswordHash = email;
+            user.Email = email;
 
             return Task.FromResult(0);
         }
